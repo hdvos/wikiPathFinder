@@ -39,7 +39,7 @@ class WikiPageFinder(object):
             newPage = self.engine.page(self.pagename)
 
             if not newPage.exists():
-                print(f"!!! '{self.pagename}' Does not exist (anymore)!")
+                print(f"!!! '{self.pagename}' Cannot be found (anymore)!")
                 return None
 
             text = newPage.text
@@ -65,7 +65,7 @@ class WikiPageFinder(object):
         except Exception as e:
             print(e)
             print(dir(self))
-            input()
+            # input()
 
     def get_links(self) -> list:
         """Returns a list of strings containing the names of the articles that the current article links to.
@@ -116,6 +116,9 @@ class WikiPageFinder(object):
         :rtype: TfidfVectorizer
         """
         texts = [child.get_text() for child in child_pages]
+        
+        # remove none values from texts
+        texts = [text for text in texts if text]
 
         vectorizer = TfidfVectorizer()
         vectorizer.fit(texts)
@@ -135,7 +138,7 @@ class WikiPageFinder(object):
         other_vector = vectorizer.transform([other_text])
 
         child_vectors = vectorizer.transform(
-            [page.get_text() for page in self.child_pages])
+            [page.get_text() for page in self.child_pages if page.get_text()])
         # print(child_vectors.shape)
         distances = cosine_distances(other_vector, child_vectors)[0]
 
