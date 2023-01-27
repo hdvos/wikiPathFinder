@@ -1,0 +1,5 @@
+nltk==3.5
+numpy==1.21.5
+scikit_learn==1.0.2
+tqdm==4.62.3
+Wikipedia_API==0.5.4
