@@ -1,18 +1,12 @@
 import random
-from attr import asdict
 import wikipediaapi
 from multiprocessing.pool import ThreadPool
 from sklearn.metrics.pairwise import cosine_distances
-from functions.wikiPageCache import wikiPageCache
 from functions.pageData import pageData
 from functions.nlpPreprocessing import preprocess
 from tqdm import tqdm
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
-from datetime import datetime
-import time
-from pprint import pprint
-
 
 class WikiPageFinder(object):
     def __init__(self, name: str, language: str = 'en'):
