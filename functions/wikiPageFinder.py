@@ -7,6 +7,7 @@ from functions.nlpPreprocessing import preprocess
 from tqdm import tqdm
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
+import sys
 
 class WikiPageFinder(object):
     def __init__(self, name: str, language: str = 'en'):
@@ -67,7 +68,12 @@ class WikiPageFinder(object):
         :return: a list of strings containing the names of the articles that the current article links to.
         :rtype: list
         """
-        return self.page.links
+        try:
+            return self.page.links
+        except Exception as e:
+            print(e)
+            print(f"Page: {self.page.name}")
+            sys.exit(1)
 
     def get_child_pages(self, cache: dict, multithread: bool = False, maxdownload=150) -> list:
         """retrieve all the pages the current page links to
