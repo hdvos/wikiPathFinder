@@ -90,7 +90,7 @@ class cacheIndex():
     def create_item_filename(self, pagename: str):
         return f"{self.cache_folder}/{pagename}.json"
 
-    def save_item(self, page: pageData, item_filename: str = None):
+    def save_item(self, page: pageData, item_filename: str = None, times_used: int = 1):
         # if '/' in item_filename:
         #     # TODO: more graceful solution
         #     return
@@ -99,7 +99,7 @@ class cacheIndex():
                     "data": asdict(page),
                     "admin": {
                         "lastUsed": time.time(),
-                        "timesUsed": 1,
+                        "timesUsed": times_used,
                     }
                 }
             with open(item_filename, 'wt', encoding="utf-8") as f:
@@ -133,7 +133,7 @@ class cacheIndex():
         item = self.load_item(item_filename)
         item.admin.lastUsed = time.time()
         item.admin.timesUsed += 1
-        self.save_item(item.data, item_filename)
+        self.save_item(item.data, item_filename, item.admin.timesUsed)
 
         return item
 
@@ -144,6 +144,6 @@ class cacheIndex():
         item = self.load_item(item_filename)
         item.admin.lastUsed = time.time()
         item.admin.timesUsed += 1
-        self.save_item(item.data, item_filename)
+        self.save_item(item.data, item_filename, item.admin.timesUsed)
         return item.data
 
