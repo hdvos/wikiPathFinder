@@ -1,5 +1,5 @@
 from functions.wikiPageFinder import WikiPageFinder
-from functions.wikiPageCache import wikiPageCache
+from functions.wikiPageCache import cacheIndex
 from functions.utils import show_route
 import argparse
 
@@ -9,9 +9,8 @@ START = "Love"
 END = "Apple"
 START = START.replace('_', ' ')
 END = END.replace('_', ' ')
-MAXDOWNLOAD = 150
-CACHE = wikiPageCache(cache_json_file)
-CACHE.load()
+MAXDOWNLOAD = 50
+
 
 # command line arguments
 parser = argparse.ArgumentParser()
@@ -28,6 +27,12 @@ MAXDOWNLOAD = args.max
 cache_json_file = args.cache
 MAXDOWNLOAD = args.max
 
+CACHE = cacheIndex()
+CACHE.load()
+
+CACHE.save()
+
+
 def main():
     """Main function
 
@@ -35,22 +40,26 @@ def main():
     """
     # Retrieve the end page.
     end_page = WikiPageFinder(END)
+    
     end_page.download_page(CACHE)
+    
 
     # Retrieve the start page.
     current_page = WikiPageFinder(START)
     current_page.download_page(CACHE)
 
     CACHE.save()
+    
 
     # The route is a list of pages that will be used to get from the start to the end page.
     route = [current_page.pagename]
-
+    
     # While the end page is not in the links of the current page, keep searching.
     while not end_page.pagename in current_page.get_links():
+        
         closest_pages = current_page.get_closest_pages(
-            end_page, CACHE)
-
+            end_page, CACHE, maxdownload=MAXDOWNLOAD)
+        
         i = 0
         current_page = closest_pages[i]
         i += 1

@@ -25,10 +25,10 @@ class WikiPageFinder(object):
         :rtype: None
         """
         assert self.pagename, "Page name is not set"
-
+        
         if self.pagename in cache.cache.keys():
-            page = cache.cache[self.pagename].data
-            cache.update(self.pagename)
+            page = cache.get_page(self.pagename)
+            # cache.update(self.pagename)
         else:
             newPage = self.engine.page(self.pagename)
 
@@ -42,10 +42,10 @@ class WikiPageFinder(object):
 
             page = pageData(self.pagename, text,
                             list(newPage.links.keys()))
+            
 
-            cache.add(page)
-
-        # print((page.text))
+            cache.index_page(page)
+        
         self.page = page
 
     def get_text(self) -> str:
@@ -59,7 +59,7 @@ class WikiPageFinder(object):
         except Exception as e:
             print(e)
             print(dir(self))
-            # input()
+            # 
 
     def get_links(self) -> list:
         """Returns a list of strings containing the names of the articles that the current article links to.
@@ -141,7 +141,7 @@ class WikiPageFinder(object):
 
         return closest_pages
 
-    def get_closest_pages(self, endPage: object, cache: dict, method: str = 'tfidf') -> np.array:
+    def get_closest_pages(self, endPage: object, cache: dict, method: str = 'tfidf', maxdownload=50) -> np.array:
         """Gets a sorted list ordered from most similar to least similar to the other page.
 
         :param endPage: the page you want to work towards.
@@ -155,8 +155,8 @@ class WikiPageFinder(object):
         :return: An ordered list of wikipedia pages.
         :rtype: np.array
         """
-        child_pages = self.get_child_pages(cache)
-
+        child_pages = self.get_child_pages(cache, maxdownload=maxdownload)
+        
         self.child_pages = [
             page for page in child_pages if hasattr(page, 'page')]
 
