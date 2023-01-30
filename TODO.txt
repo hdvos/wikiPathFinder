@@ -1,0 +1,14 @@
+My plans with the project.
+
+[x] add command line interface
+[x] cut cache up into smaller files
+[ ] use vectors to sort links
+[ ] optimize vectors with kdtree
+[ ] prune cache script
+[ ] fix AttributeError: 'NoneType' object has no attribute 'text'
+[ ] go one up if no links are found
+[ ] follow all links in cache
+[ ] store cache as zip
+[ ] more graceful solution for saving in wikipageCache.save
+[ ] save word vectors instead of entire text
+[ ] keep record of routes
