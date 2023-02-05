@@ -28,7 +28,15 @@ class cacheDataAdmin:
 
 
 class cacheIndex():
+    """ The cache index is a dict that contains the name of the page as key and the filename of the page as value.
+    """
+
     def __init__(self, cache_folder: str = "cache") -> None:
+        """Initializes the cache index.
+
+        :param cache_folder: the folder where the cache will be stored, defaults to "cache"
+        :type cache_folder: str, optional
+        """        
         self.filename = f"{cache_folder}/cacheIndex.json"
         self.cache = {}
         self.cache_folder = cache_folder
@@ -87,10 +95,26 @@ class cacheIndex():
             self.cache[page.name] = item_filename
             self.save_item(page, item_filename)
 
-    def create_item_filename(self, pagename: str):
+    def create_item_filename(self, pagename: str) -> str:
+        """Creates the filename for the cache item.
+
+        :param pagename: The name of the page.
+        :type pagename: str
+        :return: The filename for the cache item.
+        :rtype: str
+        """        
         return f"{self.cache_folder}/{pagename}.json"
 
     def save_item(self, page: pageData, item_filename: str = None, times_used: int = 1):
+        """ Saves a page to the cache.
+
+        :param page: The pageobject of the page to be saved.
+        :type page: pageData
+        :param item_filename: The file where the page must be stored, defaults to None
+        :type item_filename: str, optional
+        :param times_used: how often the cache object was accessed, defaults to 1
+        :type times_used: int, optional
+        """        
         # if '/' in item_filename:
         #     # TODO: more graceful solution
         #     return
@@ -111,7 +135,14 @@ class cacheIndex():
 
         assert os.path.exists(item_filename), f"Could not find {item_filename}, file not created"
 
-    def load_item(self, item_filename: str ):
+    def load_item(self, item_filename: str ) -> cacheItem:
+        """Loads a page from the cache.
+
+        :param item_filename: The filename of the page to be loaded.
+        :type item_filename: str
+        :return: The page as a pageData object.
+        :rtype: cacheItem
+        """        
         with open(item_filename, 'rt', encoding="utf-8") as f:
             item = json.load(f)
 
@@ -129,6 +160,7 @@ class cacheIndex():
             return item
 
     def update_item(self, pagename: str):
+        raise DeprecationWarning("This method is deprecated, use update instead")
         item_filename = self.cache[pagename]
         item = self.load_item(item_filename)
         item.admin.lastUsed = time.time()
@@ -137,7 +169,15 @@ class cacheIndex():
 
         return item
 
-    def get_page(self, pagename: str):
+    def get_page(self, pagename: str) -> dict:
+        """Gets a page from the cache.
+
+        :param pagename: The name of the page to be loaded.
+        :type pagename: str
+        :return: The page as a dict object.  TODO: check if this is correct. Is it a dict?
+        :rtype: dict
+        """        
+
 
         # print(f"Getting page {pagename} ...")
         item_filename = self.cache[pagename]
