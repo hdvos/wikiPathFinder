@@ -12,3 +12,4 @@ My plans with the project.
 [ ] more graceful solution for saving in wikipageCache.save
 [ ] save word vectors instead of entire text
 [ ] keep record of routes
+[ ] create experiments
