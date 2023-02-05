@@ -8,6 +8,7 @@ from tqdm import tqdm
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 import sys
+from pprint import pprint
 
 class WikiPageFinder(object):
     def __init__(self, name: str, language: str = 'en'):
@@ -32,10 +33,14 @@ class WikiPageFinder(object):
             # cache.update(self.pagename)
         else:
             newPage = self.engine.page(self.pagename)
-
-            if not newPage.exists():
-                print(f"!!! '{self.pagename}' Cannot be found (anymore)!")
-                return None
+            try:
+                if not newPage.exists():
+                    print(f"!!! '{self.pagename}' Cannot be found (anymore)!")
+                    return None
+            except Exception as e:
+                # TODO: make good exception if jsonerror occurs again.
+                print(e)
+                sys.exit()
 
             text = newPage.text
             if preprocess_text:
