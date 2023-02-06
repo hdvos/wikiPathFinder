@@ -1,3 +1,4 @@
 *.pyc
 pagecache.json
 cache/*
+wiki.en.vec
